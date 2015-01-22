@@ -1,0 +1,4 @@
+3-fizyka ruchu
+1-odliczenie startu
+1-framerate
+
