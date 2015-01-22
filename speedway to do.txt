@@ -1,4 +1,6 @@
-3-fizyka ruchu
-1-odliczenie startu
-1-framerate
-
+fizyka ruchu (tylko parametry)
+odliczenie startu
+framerate
+komunikat na zakonczenie
+wybor host czy guest (parametr jest trzeba dodac pplansze wyboru)
+cala otoczka sieciowa
