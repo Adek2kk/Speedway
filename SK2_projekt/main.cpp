@@ -18,11 +18,11 @@
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 300;
 const int SCREEN_BPP = 32;
-const int FRAMES_PER_SECOND = 20;
+const int FRAMES_PER_SECOND = 30;
 
 const int radius=4;
 double direction_angle = 0;
-double speed = 0.5;
+double speed = 2;
 double base_turn_angle = 1;
 
 SDL_Surface* screen = NULL;
@@ -48,9 +48,9 @@ bool quit = false;
 bool collide = false;
 bool lap_updown= false;
 bool host=true;
+int time_start;
 //Start SDL
 SDL_Init(SDL_INIT_EVERYTHING);
-
 //Set up screen
 screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 SDL_WM_SetCaption("Speedway", "game");
@@ -67,9 +67,11 @@ else
   player.x = 294;
   player.y = 250;}
 
-while( quit == false )
+while( quit == false || lap_count != 9)
     {  
-	 // fps.start();
+	 
+	time_start = SDL_GetTicks();
+      
 	if( SDL_PollEvent( &event ) )
         {           
             //If the user has Xed out the window
@@ -91,17 +93,17 @@ while( quit == false )
 	  if( keystates[ SDLK_LEFT ] )
 	  {
 	    speed-=0.05;
-	    if(speed<0.05) speed=0.05;
-	    base_turn_angle+=1;
-	    if(base_turn_angle>4) base_turn_angle=4;
+	    if(speed<1.5) speed=1.5;
+	    base_turn_angle+=0.05;
+	    if(base_turn_angle>1.5) base_turn_angle=1.5;
             direction_angle = change_angle(direction_angle,base_turn_angle);
 	  }
 	  else
 	  {
 	    speed+=0.05;
-	    if(speed>0.25) speed=0.25;
-	    base_turn_angle-=1;
-	    if(base_turn_angle<2) base_turn_angle=2; 
+	    if(speed>2) speed=2;
+	    base_turn_angle-=0.05;
+	    if(base_turn_angle<1) base_turn_angle=1; 
 	  }
 	  x = speed*cos(direction_angle*PI/180);
 	  player.x+=x;
@@ -117,7 +119,7 @@ while( quit == false )
 	//Draw first_circle
 	collide = fill_first_circle(screen, (int)player.x, (int)player.y, radius, 0xff008000);//to je zielony,
 	player_list.push_front(player); 
-	while(player_list.size()>400) player_list.pop_back();
+	while(player_list.size()>75) player_list.pop_back();
 	}
 	
 	for(int i = 0; i<player_list.size();i++)
@@ -132,6 +134,8 @@ while( quit == false )
 	
 	fill_circle(screen, 294, 250, radius, 0xff0000ff);//to je niebieski
 	/*
+	 while(opponent_list.size()>75) opponent_list.pop_back();
+	}
 	 for(int i = 0; i<opponent_list.size();i++)
 	{
 	  player_temp = opponent_list.front();
@@ -145,9 +149,13 @@ while( quit == false )
 	//Update Screen
 	SDL_Flip(screen);
 	
+	if( SDL_GetTicks()-time_start < 1000 / FRAMES_PER_SECOND )
+        {
+            //Sleep the remaining frame time
+            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - SDL_GetTicks()+time_start );
+        }
+	
 }
-//Pause
-//SDL_Delay(8000);
 
 //Free the loaded image
 SDL_FreeSurface(lap);
