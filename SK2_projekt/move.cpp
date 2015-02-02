@@ -10,17 +10,20 @@ int change_angle(int angle, int base_change)
 
 bool lap_count(int x, int y, bool updown)
 {
+  bool ans;
   if(x>299 && x<321)
   {
       if(y>24 && y<96 && updown == true)
       {
-	return true;
+	ans = true;
       }
       else if(y>206 && y<275 && updown == false)
       {
-	return true;
+	ans = true;
       }
   }
-  else return false;
+  else ans = false;
+  
+  return ans;
 }
 
