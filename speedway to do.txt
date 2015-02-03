@@ -1,4 +1,0 @@
-odliczenie startu
-komunikat na zakonczenie
-wybor host czy guest (parametr jest trzeba dodac pplansze wyboru)
-cala otoczka sieciowa
